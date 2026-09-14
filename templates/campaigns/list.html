@@ -1,0 +1,121 @@
+{% extends "base.html" %}
+
+{% block title %}
+Campaigns
+{% endblock %}
+
+{% block content %}
+
+<div
+    class="d-flex justify-content-between align-items-center mb-4"
+>
+
+    <div>
+
+        <h2>
+            RSVP Campaigns
+        </h2>
+
+        <p class="text-muted">
+            Manage event calling campaigns
+        </p>
+
+    </div>
+
+    <a
+        href="{% url 'campaigns:campaign_create' %}"
+        class="btn btn-success"
+    >
+        Create Campaign
+    </a>
+
+</div>
+
+<div class="card shadow-sm">
+
+    <div class="table-responsive">
+
+        <table class="table table-hover mb-0">
+
+            <thead class="table-light">
+
+                <tr>
+                    <th>Campaign</th>
+                    <th>Event</th>
+                    <th>Date</th>
+                    <th>Location</th>
+                    <th>Status</th>
+                    <th></th>
+                </tr>
+
+            </thead>
+
+            <tbody>
+
+                {% for campaign in page_obj %}
+
+                <tr>
+
+                    <td>
+                        {{ campaign.name }}
+                    </td>
+
+                    <td>
+                        {{ campaign.event_name }}
+                    </td>
+
+                    <td>
+                        {{ campaign.event_date }}
+                    </td>
+
+                    <td>
+                        {{ campaign.event_location }}
+                    </td>
+
+                    <td>
+
+                        <span class="badge bg-secondary">
+
+                            {{ campaign.get_status_display }}
+
+                        </span>
+
+                    </td>
+
+                    <td>
+
+                        <a
+                            href="{% url 'campaigns:campaign_detail' campaign.id %}"
+                            class="btn btn-sm btn-outline-primary"
+                        >
+                            View
+                        </a>
+
+                    </td>
+
+                </tr>
+
+                {% empty %}
+
+                <tr>
+
+                    <td
+                        colspan="6"
+                        class="text-center py-5 text-muted"
+                    >
+                        No campaigns created yet.
+                    </td>
+
+                </tr>
+
+                {% endfor %}
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</div>
+
+{% endblock %}

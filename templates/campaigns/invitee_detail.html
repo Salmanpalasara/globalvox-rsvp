@@ -1,0 +1,407 @@
+{% extends "base.html" %}
+
+{% block title %}
+{{ invitee.name }}
+{% endblock %}
+
+{% block content %}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+
+    <div>
+
+        <h2 class="mb-1">
+            {{ invitee.name }}
+        </h2>
+
+        <p class="text-muted mb-0">
+            {{ campaign.name }}
+        </p>
+
+    </div>
+
+    <a
+        href="{% url 'campaigns:campaign_detail' campaign.id %}"
+        class="btn btn-outline-secondary"
+    >
+        Back to Campaign
+    </a>
+
+</div>
+
+
+<div class="row g-3 mb-4">
+
+    <div class="col-md-4">
+
+        <div class="card shadow-sm h-100">
+
+            <div class="card-body">
+
+                <small class="text-muted">
+                    Phone
+                </small>
+
+                <h5 class="mt-2">
+                    {{ invitee.phone }}
+                </h5>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <div class="col-md-4">
+
+        <div class="card shadow-sm h-100">
+
+            <div class="card-body">
+
+                <small class="text-muted">
+                    Email
+                </small>
+
+                <h6 class="mt-2">
+                    {{ invitee.email }}
+                </h6>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <div class="col-md-4">
+
+        <div class="card shadow-sm h-100">
+
+            <div class="card-body">
+
+                <small class="text-muted">
+                    Campaign
+                </small>
+
+                <h6 class="mt-2">
+                    {{ campaign.name }}
+                </h6>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<div class="row g-3 mb-4">
+
+    <div class="col-md-3">
+
+        <div class="card shadow-sm h-100">
+
+            <div class="card-body">
+
+                <small class="text-muted">
+                    RSVP Status
+                </small>
+
+                <div class="mt-2">
+
+                    {% if campaign_invitee.rsvp_status == "CONFIRMED" %}
+
+                    <span class="badge bg-success">
+                        Confirmed
+                    </span>
+
+                    {% elif campaign_invitee.rsvp_status == "DECLINED" %}
+
+                    <span class="badge bg-danger">
+                        Declined
+                    </span>
+
+                    {% elif campaign_invitee.rsvp_status == "UNDECIDED" %}
+
+                    <span class="badge bg-warning text-dark">
+                        Undecided
+                    </span>
+
+                    {% else %}
+
+                    <span class="badge bg-secondary">
+                        Pending
+                    </span>
+
+                    {% endif %}
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <div class="col-md-3">
+
+        <div class="card shadow-sm h-100">
+
+            <div class="card-body">
+
+                <small class="text-muted">
+                    Call Status
+                </small>
+
+                <div class="mt-2">
+
+                    {% if campaign_invitee.call_status == "COMPLETED" %}
+
+                    <span class="badge bg-success">
+                        Completed
+                    </span>
+
+                    {% elif campaign_invitee.call_status == "FAILED" %}
+
+                    <span class="badge bg-danger">
+                        Failed
+                    </span>
+
+                    {% elif campaign_invitee.call_status == "PROCESSING" %}
+
+                    <span class="badge bg-primary">
+                        Processing
+                    </span>
+
+                    {% else %}
+
+                    <span class="badge bg-secondary">
+                        Not Started
+                    </span>
+
+                    {% endif %}
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <div class="col-md-3">
+
+        <div class="card shadow-sm h-100">
+
+            <div class="card-body">
+
+                <small class="text-muted">
+                    Attempts
+                </small>
+
+                <h4 class="mt-2">
+                    {{ campaign_invitee.attempt_count }}
+                </h4>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <div class="col-md-3">
+
+        <div class="card shadow-sm h-100">
+
+            <div class="card-body">
+
+                <small class="text-muted">
+                    Last Called
+                </small>
+
+                <p class="mt-2 mb-0">
+
+                    {% if campaign_invitee.last_called_at %}
+
+                        {{ campaign_invitee.last_called_at|date:"d M Y H:i" }}
+
+                    {% else %}
+
+                        Never
+
+                    {% endif %}
+
+                </p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+{% if campaign_invitee.notes %}
+
+<div class="card shadow-sm mb-4">
+
+    <div class="card-body">
+
+        <h5>
+            Notes
+        </h5>
+
+        <p class="mb-0">
+            {{ campaign_invitee.notes }}
+        </p>
+
+    </div>
+
+</div>
+
+{% endif %}
+
+
+{% if campaign_invitee.call_status == "FAILED" %}
+
+<div class="mb-4">
+
+    <form
+        method="post"
+        action="{% url 'campaigns:retry_campaign_invitee' campaign.id campaign_invitee.id %}"
+    >
+
+        {% csrf_token %}
+
+        <button
+            type="submit"
+            class="btn btn-warning"
+            onclick="return confirm('Retry this failed call?');"
+        >
+            Retry Call
+        </button>
+
+    </form>
+
+</div>
+
+{% endif %}
+
+
+<div class="card shadow-sm">
+
+    <div class="card-header bg-white">
+
+        <strong>
+            Call History
+        </strong>
+
+    </div>
+
+    <div class="table-responsive">
+
+        <table class="table table-hover align-middle mb-0">
+
+            <thead class="table-light">
+
+                <tr>
+                    <th>Date</th>
+                    <th>Status</th>
+                    <th>Provider Result</th>
+                    <th>Error</th>
+                </tr>
+
+            </thead>
+
+            <tbody>
+
+                {% for log in call_logs %}
+
+                <tr>
+
+                    <td>
+                        {{ log.created_at|date:"d M Y H:i:s" }}
+                    </td>
+
+                    <td>
+
+                        {% if log.status == "SUCCESS" %}
+
+                        <span class="badge bg-success">
+                            Success
+                        </span>
+
+                        {% else %}
+
+                        <span class="badge bg-danger">
+                            Failed
+                        </span>
+
+                        {% endif %}
+
+                    </td>
+
+
+                    <td>
+
+                        {% if log.response_data %}
+
+                            {{ log.response_data.rsvp_status|default:"-" }}
+
+                        {% else %}
+
+                            -
+
+                        {% endif %}
+
+                    </td>
+
+
+                    <td>
+
+                        {% if log.error_message %}
+
+                            <span class="text-danger">
+                                {{ log.error_message }}
+                            </span>
+
+                        {% else %}
+
+                            -
+
+                        {% endif %}
+
+                    </td>
+
+                </tr>
+
+                {% empty %}
+
+                <tr>
+
+                    <td
+                        colspan="4"
+                        class="text-center text-muted py-4"
+                    >
+                        No call attempts yet.
+                    </td>
+
+                </tr>
+
+                {% endfor %}
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</div>
+
+{% endblock %}

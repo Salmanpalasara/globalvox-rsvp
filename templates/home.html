@@ -1,0 +1,102 @@
+{% extends "base.html" %}
+
+
+{% block title %}
+
+RSVP Campaign Manager
+
+{% endblock %}
+
+
+{% block content %}
+
+
+<div class="row">
+
+    <div class="col-lg-8 mx-auto">
+
+
+        <div class="card shadow-sm">
+
+            <div class="card-body p-5">
+
+
+                <h1 class="mb-3">
+
+                    RSVP Campaign Manager
+
+                </h1>
+
+
+                <p class="text-muted">
+
+                    Manage event invitees,
+                    create RSVP campaigns,
+                    start AI calling campaigns
+                    and track campaign results.
+
+                </p>
+
+
+                <hr>
+
+
+                <div class="row g-3 mt-2">
+
+
+                    <div class="col-md-4">
+
+                        <a
+    href="{% url 'campaigns:import_invitees' %}"
+    class="btn btn-primary w-100"
+>
+    Import Invitees
+</a>
+
+<a
+    href="{% url 'campaigns:invitee_list' %}"
+    class="btn btn-dark w-100"
+>
+    View Invitees
+</a>
+
+                    </div>
+
+
+                    <div class="col-md-4">
+
+                        <a
+    href="{% url 'campaigns:campaign_create' %}"
+    class="btn btn-success w-100"
+>
+    Create Campaign
+</a>
+
+                    </div>
+
+
+                    <div class="col-md-4">
+
+                        <button
+                            class="btn btn-dark w-100"
+                        >
+                            View Campaigns
+                        </button>
+
+                    </div>
+
+
+                </div>
+
+
+            </div>
+
+        </div>
+
+
+    </div>
+
+</div>
+
+
+{% endblock %}
