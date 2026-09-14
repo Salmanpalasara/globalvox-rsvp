@@ -1,2 +1,13 @@
+[project]
+name = "globalvox-rsvp"
+version = "1.0.0"
+requires-python = ">=3.11,<3.12"
+
+dependencies = [
+    "Django>=5.0,<6.0",
+    "dj-database-url",
+    "psycopg[binary]",
+]
+
 [tool.vercel.scripts]
 build = "python manage.py migrate && python manage.py collectstatic --noinput"
